@@ -28,6 +28,15 @@ def compute_stat_features(channel_data):
 features_list = []  
 
 for folder in folders:  
+    # Baca anotasi kelas jika ada  
+    annot_path = os.path.join(folder, '_annotations.csv')  
+    if os.path.exists(annot_path):  
+        df_annot = pd.read_csv(annot_path)  
+        # Buat peta filename ke class  
+        filename_to_class = dict(zip(df_annot['filename'], df_annot['class']))  
+    else:  
+        filename_to_class = {}  
+
     # Dapatkan nama file gambar di folder  
     image_files = [f for f in os.listdir(folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp'))]  
 
@@ -38,23 +47,16 @@ for folder in folders:
             print(f"Warning: gagal baca gambar {img_path}")  
             continue  
         
-        # Jika kamu punya file anotasi untuk kelas, kamu bisa baca kelasnya juga  
-        # tapi di sini saya asumsikan kelas tidak ada atau bisa diperoleh dengan cara lain  
-        label = None  # atau isi sesuai kebutuhan  
-
-        # Pisahkan channel: BGR ke RGB  
         R = image[:, :, 2].flatten()  
         G = image[:, :, 1].flatten()  
         B = image[:, :, 0].flatten()  
 
-        # Hitung fitur orde1 per channel  
         R_feats = compute_stat_features(R)  
         G_feats = compute_stat_features(G)  
         B_feats = compute_stat_features(B)  
 
         feat = {'filename': filename}  
 
-        # gabungkan fitur ke dict  
         for stat_name, val in R_feats.items():  
             feat[f'R_{stat_name}'] = val  
         for stat_name, val in G_feats.items():  
@@ -62,8 +64,8 @@ for folder in folders:
         for stat_name, val in B_feats.items():  
             feat[f'B_{stat_name}'] = val  
 
-        if label is not None:  
-            feat['class'] = label  
+        # Masukkan class kalau ada  
+        feat['class'] = filename_to_class.get(filename, 'Unknown')  
 
         features_list.append(feat)  
 
@@ -71,3 +73,5 @@ df_features = pd.DataFrame(features_list)
 output_file = 'Orde1_Daging.csv'  
 df_features.to_csv(output_file, index=False)  
 print(f"Fitur orde 1 per gambar disimpan di {output_file}")  
+
+
