@@ -5,7 +5,7 @@ import numpy as np
 from scipy import stats  
 
 # Root folder dataset  
-root_dir = 'dataset-ayam-sapi-final'  
+root_dir = 'dataset_Sapi_Fresh_Unfresh'  
 subfolders = ['train', 'test', 'valid']  
 folders = [os.path.join(root_dir, sf) for sf in subfolders]  
 
@@ -70,7 +70,7 @@ for folder in folders:
         features_list.append(feat)  
 
 df_features = pd.DataFrame(features_list)  
-output_file = 'Orde1_Daging.csv'  
+output_file = 'Orde1_Esi.csv'  
 df_features.to_csv(output_file, index=False)  
 print(f"Fitur orde 1 per gambar disimpan di {output_file}")  
 

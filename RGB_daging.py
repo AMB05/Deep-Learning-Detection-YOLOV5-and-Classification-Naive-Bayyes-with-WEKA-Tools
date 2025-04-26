@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np  
 
 # Path root dataset  
-root_dir = 'dataset-ayam-sapi-final'  
+root_dir = 'dataset_Sapi_Fresh_Unfresh'  
 
 # List folder lengkap dengan path  
 folders = [os.path.join(root_dir, subfolder) for subfolder in ['train', 'test', 'valid']]  
@@ -42,7 +42,7 @@ for folder in folders:
     df_folder = process_folder(folder)  
     df_all = pd.concat([df_all, df_folder], ignore_index=True)  
 
-output_csv = 'RGB_Daging.csv'  
+output_csv = 'RGB_Esi.csv'  
 df_all.to_csv(output_csv, index=False)  
 
 print(f"Proses selesai, data disimpan di {output_csv}")  
